@@ -26,47 +26,30 @@ export function MarketplaceModelCard({
   const getTaskTypeBadgeStyles = (taskType: string) => {
     switch (taskType) {
       case "Detection":
-        return {
-          backgroundColor: "rgba(217, 247, 190, 0.45)",
-          borderColor: "rgba(19, 82, 0, 0.4)",
-          textColor: "#135200"
-        };
+        return { backgroundColor: "#f0fdf9", borderColor: "#d2eddb", textColor: "#0f7661" };
       case "Classification":
-        return {
-          backgroundColor: "rgba(208, 231, 255, 0.45)",
-          borderColor: "rgba(0, 58, 140, 0.4)",
-          textColor: "#003a8c"
-        };
+        return { backgroundColor: "#eff6ff", borderColor: "#bfdbfe", textColor: "#1d4ed8" };
       case "Segmentation":
-        return {
-          backgroundColor: "rgba(255, 241, 184, 0.45)",
-          borderColor: "rgba(135, 77, 0, 0.4)",
-          textColor: "#874d00"
-        };
+        return { backgroundColor: "#fffbeb", borderColor: "#fde68a", textColor: "#92400e" };
       case "Grading":
-        return {
-          backgroundColor: "rgba(249, 240, 255, 0.85)",
-          borderColor: "rgba(57, 16, 133, 0.4)",
-          textColor: "#391085"
-        };
+        return { backgroundColor: "#f5f3ff", borderColor: "#ddd6fe", textColor: "#5b21b6" };
       default:
-        return {
-          backgroundColor: "rgba(208, 231, 255, 0.45)",
-          borderColor: "rgba(0, 58, 140, 0.4)",
-          textColor: "#003a8c"
-        };
+        return { backgroundColor: "#eff6ff", borderColor: "#bfdbfe", textColor: "#1d4ed8" };
     }
   };
 
   const taskBadgeStyles = getTaskTypeBadgeStyles(taskType);
   const isResearchOnly = usageStatus === "Research-only";
   const statusImage = isResearchOnly ? imgResearch1 : imgHospital1;
-  const statusText = isResearchOnly ? "RESEARCH-ONLY" : "CLINICAL-READY";
+  const statusText = isResearchOnly ? "Research" : "Clinical";
 
   return (
     <Link to={`/pathologist/marketplace/${id}`} className="block">
       <div
-        className="bg-white relative w-full h-full flex flex-col border border-[#dfdfdf] rounded-[12px] p-[24px] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-all duration-200 cursor-pointer group"
+        className="bg-white relative w-full h-full flex flex-col border border-[rgba(0,0,0,0.13)] rounded-[12px] p-[24px] cursor-pointer group"
+        style={{ transition: 'box-shadow 0.25s ease, transform 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.2s ease' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.10)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(0,0,0,0.22)'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = ''; (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(0,0,0,0.13)'; }}
       >
         {/* Top Badges Row */}
         <div className="flex items-center gap-[8px] mb-[16px] min-h-[26px]">
@@ -79,13 +62,13 @@ export function MarketplaceModelCard({
             }}
           >
             <span
-              className="font-['Roboto_Flex'] whitespace-nowrap"
               style={{
+                fontFamily: "'DM Mono', monospace",
                 fontSize: '12px',
                 lineHeight: '20px',
                 color: taskBadgeStyles.textColor,
-                fontWeight: 400,
-                fontVariationSettings: "'GRAD' 0, 'XOPQ' 96, 'XTRA' 468, 'YOPQ' 79, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712, 'wdth' 100"
+                fontWeight: 500,
+                whiteSpace: 'nowrap',
               }}
             >
               {taskType}
@@ -94,21 +77,18 @@ export function MarketplaceModelCard({
 
           {/* Usage Status Badge */}
           <div className="inline-flex items-center gap-[4px] px-[9px] py-[5px] rounded-[6px] border border-[#ebebeb]">
-            <div className="relative shrink-0 size-[20px]">
-              <img
-                alt=""
-                className="absolute inset-0 size-full object-cover"
-                src={statusImage}
-              />
+            <div className="relative shrink-0 size-[16px]">
+              <img alt="" className="absolute inset-0 size-full object-cover" src={statusImage} />
             </div>
             <span
-              className="font-['Roboto_Flex'] uppercase whitespace-nowrap"
               style={{
+                fontFamily: "'DM Mono', monospace",
                 fontSize: '12px',
-                lineHeight: '20px',
-                color: '#525252',
-                fontWeight: 400,
-                fontVariationSettings: "'GRAD' 0, 'XOPQ' 96, 'XTRA' 468, 'YOPQ' 79, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712, 'wdth' 100"
+                lineHeight: '16px',
+                color: 'rgba(82,82,82,0.85)',
+                fontWeight: 500,
+                whiteSpace: 'nowrap',
+                textTransform: 'capitalize',
               }}
             >
               {statusText}
@@ -119,20 +99,21 @@ export function MarketplaceModelCard({
         {/* Model Name and Description */}
         <div className="flex flex-col gap-[4px] mb-[16px] flex-grow">
           <h3
-            className="font-['Roboto'] group-hover:text-primary transition-colors"
+            className="group-hover:text-primary transition-colors"
             style={{
+              fontFamily: "'DM Sans', sans-serif",
               fontSize: '18px',
-              lineHeight: '26px',
+              lineHeight: '24px',
               fontWeight: 500,
-              color: '#000000'
+              color: '#000000',
             }}
           >
             {name}
           </h3>
           <div className="overflow-clip" style={{ height: '110px' }}>
             <p
-              className="font-['Roboto']"
               style={{
+                fontFamily: "'DM Sans', sans-serif",
                 fontSize: '14px',
                 lineHeight: '22px',
                 color: '#525252',
@@ -141,7 +122,7 @@ export function MarketplaceModelCard({
                 overflow: 'hidden',
                 display: '-webkit-box',
                 WebkitLineClamp: 5,
-                WebkitBoxOrient: 'vertical'
+                WebkitBoxOrient: 'vertical',
               }}
             >
               {clinicalUseOneLine}
@@ -155,15 +136,17 @@ export function MarketplaceModelCard({
             {applicabilityTags.slice(0, 4).map((tag, index) => (
               <div
                 key={index}
-                className="inline-flex items-center bg-white px-[9px] py-[3px] rounded-[6px] border border-[rgba(82,82,82,0.4)]"
+                className="inline-flex items-center px-[9px] py-[3px] rounded-[6px]"
+                style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.13)' }}
               >
                 <span
-                  className="font-['Roboto_Mono'] whitespace-nowrap"
                   style={{
+                    fontFamily: "'DM Mono', monospace",
                     fontSize: '12px',
                     lineHeight: '20px',
-                    color: '#6f6f6f',
-                    fontWeight: 400
+                    color: '#4b5563',
+                    fontWeight: 400,
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {tag}

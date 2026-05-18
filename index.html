@@ -5,6 +5,31 @@
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Developer Model Management Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      @keyframes pageIn {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes cardIn {
+        from { opacity: 0; transform: translateY(12px) scale(0.98); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      @keyframes dropdownIn {
+        from { opacity: 0; transform: translateY(-6px) scaleY(0.95); }
+        to   { opacity: 1; transform: translateY(0) scaleY(1); }
+      }
+      @keyframes chipIn {
+        from { opacity: 0; transform: scale(0.85); }
+        to   { opacity: 1; transform: scale(1); }
+      }
+      .animate-page-in   { animation: pageIn 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+      .animate-card-in   { animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+      .animate-dropdown  { animation: dropdownIn 0.18s cubic-bezier(0.22,1,0.36,1) both; transform-origin: top; }
+      .animate-chip-in   { animation: chipIn 0.2s cubic-bezier(0.34,1.56,0.64,1) both; }
+    </style>
     </head>
 
     <body>

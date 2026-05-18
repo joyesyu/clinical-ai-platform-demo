@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router';
-import { Header } from '../components/Header';
+import { PathologistHeader, DEVELOPER_TABS, DEVELOPER_HOME_ROUTE } from '../components/pathologist/PathologistHeader';
 import { ArrowLeft, Copy, RefreshCw, Send, Check, Link as LinkIcon, Calendar, User, Building2 } from 'lucide-react';
 import { useState } from 'react';
 import { ModelRequest } from '../data/models';
@@ -53,7 +53,7 @@ export function GenerateEndpointPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <PathologistHeader tabs={DEVELOPER_TABS} homeRoute={DEVELOPER_HOME_ROUTE} />
 
       <main className="max-w-4xl mx-auto px-6 py-8">
         {/* Back Button */}

@@ -5,6 +5,8 @@ import { RequestAccessModal } from "../../components/pathologist/RequestAccessMo
 import svgPaths from "../../../imports/svg-41n8ab18bl";
 import { Link } from "react-router";
 import { X, ChevronDown } from "lucide-react";
+import imgHospital from '../../../assets/09c9138fae8e42a787af08edb0f8d39b50b3bfe2.png';
+import imgResearch from '../../../assets/0d5c3c1dd2bc92a8c4b9ed8a23da75a7a6087a26.png';
 
 // Mock data - only Active models visible to pathologists
 const activeModels = [
@@ -382,8 +384,9 @@ export default function PathologistMarketplace() {
     const matchesTask = selectedTaskTypes.length === 0 || 
                        selectedTaskTypes.includes(model.taskType);
     
-    // For usage status, we'll use a simple mock - in real app this would come from model data
-    const matchesUsage = selectedUsageStatus === "" || model.usageStatus === selectedUsageStatus;
+    const matchesUsage = selectedUsageStatus === "" ||
+      model.usageStatus === selectedUsageStatus ||
+      (selectedUsageStatus === "Clinical-ready" && model.usageStatus === "Dual-use");
     
     return matchesSearch && matchesOrgan && matchesTask && matchesUsage;
   });
@@ -401,14 +404,14 @@ export default function PathologistMarketplace() {
     <div className="bg-white relative min-h-screen w-full">
       <PathologistHeader />
       
-      <div className="pt-[40px] px-[158px] pb-[96px] bg-white">
+      <div className="pt-[40px] px-[158px] pb-[96px] bg-white animate-page-in">
         <div>
           {/* Header */}
           <div className="mb-[40px]">
-            <h1 className="mb-[8px] font-['Roboto']" style={{ fontSize: '24px', fontWeight: 500, lineHeight: '32px', color: '#000000' }}>
+            <h1 className="mb-[8px]" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '24px', fontWeight: 500, lineHeight: '32px', color: '#000000' }}>
               Model Marketplace
             </h1>
-            <p className="font-['Roboto']" style={{ fontSize: '14px', lineHeight: '22px', color: '#525252' }}>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', lineHeight: '22px', color: '#525252' }}>
               Browse and request access to AI diagnostic models
             </p>
           </div>
@@ -416,101 +419,9 @@ export default function PathologistMarketplace() {
           {/* Search and Filters */}
           <div className="mb-[16px] p-[0px]">
             <div className="flex gap-[8px] items-end">
-              {/* Organ / Sample Filter */}
-              <div className="w-[192px]">
-                <label className="block mb-[8px] font-['Roboto']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
-                  Organ / Sample
-                </label>
-                <div className="relative" ref={organDropdownRef}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOrganDropdownOpen(!organDropdownOpen);
-                      setTaskTypeDropdownOpen(false);
-                      setUsageDropdownOpen(false);
-                    }}
-                    className="w-full bg-input-background border border-border rounded-[6px] px-[13px] py-px h-[40px] text-left font-['Roboto'] flex items-center justify-between focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
-                    style={{ fontSize: '14px', lineHeight: '22px', color: selectedOrgans.length > 0 ? '#161616' : '#6f6f6f' }}
-                  >
-                    <span className="truncate">
-                      {selectedOrgans.length > 0 ? `${selectedOrgans.length} selected` : 'All'}
-                    </span>
-                    <svg className="size-[16px] flex-shrink-0" fill="none" viewBox="0 0 16 16">
-                      <path d="M4 6L8 10L12 6" stroke="#6F6F6F" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.33333" />
-                    </svg>
-                  </button>
-                  {organDropdownOpen && (
-                    <div className="absolute z-10 mt-[4px] w-full max-h-[256px] overflow-y-auto bg-card border border-border rounded-[6px] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-                      {allOrgans.map((organ) => (
-                        <div
-                          key={organ}
-                          onClick={() => toggleOrganSelection(organ)}
-                          className="px-[12px] py-[8px] hover:bg-[rgba(0,0,0,0.02)] cursor-pointer flex items-center gap-[8px]"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedOrgans.includes(organ)}
-                            onChange={() => {}}
-                            className="size-[16px] rounded-[4px] border border-border cursor-pointer"
-                          />
-                          <span className="font-['Roboto']" style={{ fontSize: '14px', lineHeight: '22px', color: '#161616' }}>
-                            {organ}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Task Type Filter */}
-              <div className="w-[192px]">
-                <label className="block mb-[8px] font-['Roboto']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
-                  Task Type
-                </label>
-                <div className="relative" ref={taskTypeDropdownRef}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setTaskTypeDropdownOpen(!taskTypeDropdownOpen);
-                      setOrganDropdownOpen(false);
-                      setUsageDropdownOpen(false);
-                    }}
-                    className="w-full bg-input-background border border-border rounded-[6px] px-[12px] h-[40px] text-left font-['Roboto'] flex items-center justify-between focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
-                    style={{ fontSize: '14px', lineHeight: '22px', color: selectedTaskTypes.length > 0 ? '#161616' : '#6f6f6f' }}
-                  >
-                    <span className="truncate">
-                      {selectedTaskTypes.length > 0 ? `${selectedTaskTypes.length} selected` : 'All'}
-                    </span>
-                    <ChevronDown className="size-[16px] flex-shrink-0 ml-[8px]" style={{ color: '#6f6f6f' }} />
-                  </button>
-                  {taskTypeDropdownOpen && (
-                    <div className="absolute z-10 mt-[4px] w-full bg-card border border-border rounded-[6px] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
-                      {taskTypes.map((taskType) => (
-                        <div
-                          key={taskType}
-                          onClick={() => toggleTaskTypeSelection(taskType)}
-                          className="px-[12px] py-[8px] hover:bg-[rgba(0,0,0,0.02)] cursor-pointer flex items-center gap-[8px]"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedTaskTypes.includes(taskType)}
-                            onChange={() => {}}
-                            className="size-[16px] rounded-[4px] border border-border cursor-pointer"
-                          />
-                          <span className="font-['Roboto']" style={{ fontSize: '14px', lineHeight: '22px', color: '#161616' }}>
-                            {taskType}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
               {/* Usage Status Filter */}
-              <div className="w-[192px]">
-                <label className="block mb-[8px] font-['Roboto']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
+              <div className="w-[145px]">
+                <label className="block mb-[8px]" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
                   Usage Status
                 </label>
                 <div className="relative" ref={usageDropdownRef}>
@@ -521,7 +432,7 @@ export default function PathologistMarketplace() {
                       setOrganDropdownOpen(false);
                       setTaskTypeDropdownOpen(false);
                     }}
-                    className="w-full bg-input-background border border-border rounded-[6px] px-[12px] h-[40px] text-left font-['Roboto'] flex items-center justify-between focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+                    className="w-full bg-input-background border border-border rounded-[6px] px-[12px] h-[36px] text-left font-['DM_Sans'] flex items-center justify-between focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
                     style={{ fontSize: '14px', lineHeight: '22px', color: selectedUsageStatus ? '#161616' : '#6f6f6f' }}
                   >
                     <span className="truncate">
@@ -530,7 +441,7 @@ export default function PathologistMarketplace() {
                     <ChevronDown className="size-[16px] flex-shrink-0 ml-[8px]" style={{ color: '#6f6f6f' }} />
                   </button>
                   {usageDropdownOpen && (
-                    <div className="absolute z-10 mt-[4px] w-full bg-card border border-border rounded-[6px] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+                    <div className="animate-dropdown absolute z-10 mt-[4px] w-auto min-w-full bg-card border border-border rounded-[6px] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
                       {usageStatuses.map((status) => (
                         <div
                           key={status}
@@ -542,9 +453,9 @@ export default function PathologistMarketplace() {
                             name="usageStatus"
                             checked={status === "All" ? selectedUsageStatus === "" : selectedUsageStatus === status}
                             onChange={() => {}}
-                            className="size-[16px] border border-border cursor-pointer"
+                            style={{ width: "14px", height: "14px", flexShrink: 0, cursor: "pointer", accentColor: "#229f90" }}
                           />
-                          <span className="font-['Roboto']" style={{ fontSize: '14px', lineHeight: '22px', color: '#161616' }}>
+                          <span className="font-['DM_Sans']" style={{ fontSize: '14px', lineHeight: '22px', color: '#161616' }}>
                             {status}
                           </span>
                         </div>
@@ -554,9 +465,101 @@ export default function PathologistMarketplace() {
                 </div>
               </div>
 
-              {/* Search Bar - Far Right */}
-              <div className="w-[600px]">
-                <label className="block mb-[8px] font-['Roboto']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
+              {/* Task Type Filter */}
+              <div className="w-[160px]">
+                <label className="block mb-[8px]" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
+                  Task Type
+                </label>
+                <div className="relative" ref={taskTypeDropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTaskTypeDropdownOpen(!taskTypeDropdownOpen);
+                      setOrganDropdownOpen(false);
+                      setUsageDropdownOpen(false);
+                    }}
+                    className="w-full bg-input-background border border-border rounded-[6px] px-[12px] h-[36px] text-left font-['DM_Sans'] flex items-center justify-between focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+                    style={{ fontSize: '14px', lineHeight: '22px', color: selectedTaskTypes.length > 0 ? '#161616' : '#6f6f6f' }}
+                  >
+                    <span className="truncate">
+                      {selectedTaskTypes.length > 0 ? `${selectedTaskTypes.length} selected` : 'All'}
+                    </span>
+                    <ChevronDown className="size-[16px] flex-shrink-0 ml-[8px]" style={{ color: '#6f6f6f' }} />
+                  </button>
+                  {taskTypeDropdownOpen && (
+                    <div className="animate-dropdown absolute z-10 mt-[4px] w-auto min-w-full bg-card border border-border rounded-[6px] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+                      {taskTypes.map((taskType) => (
+                        <div
+                          key={taskType}
+                          onClick={() => toggleTaskTypeSelection(taskType)}
+                          className="px-[12px] py-[8px] hover:bg-[rgba(0,0,0,0.02)] cursor-pointer flex items-center gap-[8px]"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedTaskTypes.includes(taskType)}
+                            onChange={() => {}}
+                            style={{ width: "14px", height: "14px", flexShrink: 0, cursor: "pointer", accentColor: "#229f90" }}
+                          />
+                          <span className="font-['DM_Sans']" style={{ fontSize: '14px', lineHeight: '22px', color: '#161616', whiteSpace: 'nowrap' }}>
+                            {taskType}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Organ / Sample Filter */}
+              <div className="w-[220px]">
+                <label className="block mb-[8px]" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
+                  Organ / Sample
+                </label>
+                <div className="relative" ref={organDropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOrganDropdownOpen(!organDropdownOpen);
+                      setTaskTypeDropdownOpen(false);
+                      setUsageDropdownOpen(false);
+                    }}
+                    className="w-full bg-input-background border border-border rounded-[6px] px-[13px] py-px h-[36px] text-left font-['DM_Sans'] flex items-center justify-between focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+                    style={{ fontSize: '14px', lineHeight: '22px', color: selectedOrgans.length > 0 ? '#161616' : '#6f6f6f' }}
+                  >
+                    <span className="truncate">
+                      {selectedOrgans.length > 0 ? `${selectedOrgans.length} selected` : 'All'}
+                    </span>
+                    <svg className="size-[16px] flex-shrink-0" fill="none" viewBox="0 0 16 16">
+                      <path d="M4 6L8 10L12 6" stroke="#6F6F6F" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.33333" />
+                    </svg>
+                  </button>
+                  {organDropdownOpen && (
+                    <div className="animate-dropdown absolute z-10 mt-[4px] w-auto min-w-full max-h-[256px] overflow-y-auto bg-card border border-border rounded-[6px] shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+                      {allOrgans.map((organ) => (
+                        <div
+                          key={organ}
+                          onClick={() => toggleOrganSelection(organ)}
+                          className="px-[12px] py-[8px] hover:bg-[rgba(0,0,0,0.02)] cursor-pointer flex items-center gap-[8px]"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedOrgans.includes(organ)}
+                            onChange={() => {}}
+                            style={{ width: "14px", height: "14px", flexShrink: 0, cursor: "pointer", accentColor: "#229f90" }}
+                          />
+                          <span className="font-['DM_Sans']" style={{ fontSize: '14px', lineHeight: '22px', color: '#161616', whiteSpace: 'nowrap' }}>
+                            {organ}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Search Bar */}
+              <div className="w-[260px]">
+                <label className="block mb-[8px]" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
                   Search
                 </label>
                 <div className="relative">
@@ -564,15 +567,15 @@ export default function PathologistMarketplace() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-input-background border border-border rounded-[6px] pl-[40px] pr-[16px] h-[40px] text-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all font-['Roboto']"
-                    placeholder="Search by model name or clinical use..."
-                    style={{ fontSize: '14px', lineHeight: '22px' }}
+                    className="w-full bg-input-background border border-border rounded-[6px] pl-[40px] pr-[16px] h-[36px] text-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+                    placeholder="Search by model name ..."
+                    style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', lineHeight: '22px' }}
                   />
-                  <div className="absolute left-[12px] size-[16px] top-[12px]">
+                  <div className="absolute left-[11px] size-[16px] top-1/2 -translate-y-1/2">
                     <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 14 14">
                       <g id="Icon">
-                        <path d={svgPaths.p8cdb700} stroke="rgba(0,0,0,0.25)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.16667" />
-                        <path d="M12.25 12.25L9.74167 9.74167" stroke="rgba(0,0,0,0.25)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.16667" />
+                        <path d={svgPaths.p8cdb700} stroke="rgba(0,0,0,0.43)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.16667" />
+                        <path d="M12.25 12.25L9.74167 9.74167" stroke="rgba(0,0,0,0.43)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.16667" />
                       </g>
                     </svg>
                   </div>
@@ -581,15 +584,15 @@ export default function PathologistMarketplace() {
 
               {/* View Toggle */}
               <div className="flex items-end ml-auto">
-                <div className="inline-flex items-center bg-card border border-border rounded-[4px] p-[4px] shadow-[0_2px_4px_rgba(0,0,0,0.04)]">
+                <div className="inline-flex items-center bg-card rounded-[4px] p-[4px] shadow-[0_2px_4px_rgba(0,0,0,0.04)]" style={{ border: '1px solid rgba(0,0,0,0.13)' }}>
                   <button
                     onClick={() => setViewMode("card")}
-                    className={`px-[16px] py-[6px] rounded-[4px] transition-all duration-200 font-['Roboto'] ${
-                      viewMode === "card" 
-                        ? "bg-[rgba(0,0,0,0.06)] shadow-sm" 
+                    className={`px-[16px] py-[6px] rounded-[4px] transition-all duration-200 font-['DM_Sans'] ${
+                      viewMode === "card"
+                        ? "bg-[rgba(0,0,0,0.06)] shadow-sm"
                         : "hover:bg-[rgba(0,0,0,0.02)]"
                     }`}
-                    style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: viewMode === "card" ? '#161616' : '#6F6F6F' }}
+                    style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: viewMode === "card" ? '#161616' : '#6F6F6F', border: viewMode === "card" ? '1px solid rgba(0,0,0,0.13)' : '1px solid transparent' }}
                   >
                     <div className="flex items-center gap-[8px]">
                       <svg className="size-[14px]" fill="none" viewBox="0 0 14 14">
@@ -603,12 +606,12 @@ export default function PathologistMarketplace() {
                   </button>
                   <button
                     onClick={() => setViewMode("table")}
-                    className={`px-[16px] py-[6px] rounded-[4px] transition-all duration-200 font-['Roboto'] ${
-                      viewMode === "table" 
-                        ? "bg-[rgba(0,0,0,0.06)] shadow-sm" 
+                    className={`px-[16px] py-[6px] rounded-[4px] transition-all duration-200 font-['DM_Sans'] ${
+                      viewMode === "table"
+                        ? "bg-[rgba(0,0,0,0.06)] shadow-sm"
                         : "hover:bg-[rgba(0,0,0,0.02)]"
                     }`}
-                    style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: viewMode === "table" ? '#161616' : '#6F6F6F' }}
+                    style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: viewMode === "table" ? '#161616' : '#6F6F6F', border: viewMode === "table" ? '1px solid rgba(0,0,0,0.13)' : '1px solid transparent' }}
                   >
                     <div className="flex items-center gap-[8px]">
                       <svg className="size-[14px]" fill="none" viewBox="0 0 14 14">
@@ -629,16 +632,18 @@ export default function PathologistMarketplace() {
                 {activeFilters.map((filter, index) => (
                   <div
                     key={`${filter.type}-${filter.value}-${index}`}
-                    className="inline-flex items-center gap-[4px] bg-[rgba(24,144,255,0.08)] border border-[rgba(24,144,255,0.2)] rounded-[4px] px-[8px] py-[4px]"
+                    className="animate-chip-in inline-flex items-center gap-[4px] px-[9px] py-px"
+                    style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid #334155', borderRadius: '20px' }}
                   >
-                    <span className="font-['Roboto']" style={{ fontSize: '12px', lineHeight: '20px', color: '#096DD9', fontWeight: 500 }}>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', lineHeight: '20px', fontWeight: 500, color: '#334155', whiteSpace: 'nowrap' }}>
                       {filter.label}
                     </span>
                     <button
                       onClick={() => removeFilter(filter.type, filter.value)}
-                      className="hover:bg-[rgba(24,144,255,0.12)] rounded-[4px] p-[2px] transition-colors"
+                      className="transition-opacity hover:opacity-60 p-[2px] flex items-center justify-center"
+                      style={{ borderRadius: '4px' }}
                     >
-                      <X className="size-[12px]" style={{ color: '#096DD9' }} />
+                      <X className="size-[12px]" style={{ color: '#334155' }} />
                     </button>
                   </div>
                 ))}
@@ -650,12 +655,17 @@ export default function PathologistMarketplace() {
           <div>
             {viewMode === "card" ? (
               <div className="grid grid-cols-5 gap-[16px]">
-                {filteredModels.map((model) => (
-                  <MarketplaceModelCard
+                {filteredModels.map((model, index) => (
+                  <div
                     key={model.id}
-                    {...model}
-                    onRequestAccess={() => handleRequestAccess(model.id)}
-                  />
+                    className="animate-card-in"
+                    style={{ animationDelay: `${index * 40}ms` }}
+                  >
+                    <MarketplaceModelCard
+                      {...model}
+                      onRequestAccess={() => handleRequestAccess(model.id)}
+                    />
+                  </div>
                 ))}
               </div>
             ) : (
@@ -663,77 +673,110 @@ export default function PathologistMarketplace() {
                 <table className="w-full">
                   <thead className="bg-[rgba(0,0,0,0.02)] border-b border-[rgba(0,0,0,0.06)]">
                     <tr>
-                      <th className="text-left px-[24px] py-[12px] font-['Roboto']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
+                      <th className="text-left px-[24px] py-[12px] font-['DM_Sans']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
                         Model Name
                       </th>
-                      <th className="text-left px-[24px] py-[12px] font-['Roboto']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
+                      <th className="text-left px-[24px] py-[12px] font-['DM_Sans']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
                         Task Type
                       </th>
-                      <th className="text-left px-[24px] py-[12px] font-['Roboto']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>Applicability</th>
-                      <th className="text-left px-[24px] py-[12px] font-['Roboto']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
+                      <th className="text-left px-[24px] py-[12px] font-['DM_Sans']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>Applicability</th>
+                      <th className="text-left px-[24px] py-[12px] font-['DM_Sans']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
                         Usage Status
                       </th>
-                      <th className="text-right px-[24px] py-[12px] font-['Roboto']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
+                      <th className="text-right px-[24px] py-[12px] font-['DM_Sans']" style={{ fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: '#161616' }}>
                         
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredModels.map((model, index) => (
-                      <tr 
-                        key={model.id} 
-                        className="border-b border-[rgba(0,0,0,0.06)] last:border-b-0 hover:bg-[rgba(0,0,0,0.02)] transition-colors"
-                      >
-                        <td className="px-[24px] py-[16px]">
-                          <Link 
-                            to={`/pathologist/marketplace/${model.id}`}
-                            className="font-['Roboto'] hover:text-primary transition-colors"
-                            style={{ fontSize: '14px', fontWeight: 500, lineHeight: '22px', color: '#000000' }}
-                          >
-                            {model.name}
-                          </Link>
-                        </td>
-                        <td className="px-[24px] py-[16px]">
-                          <span className="inline-flex items-center px-[8px] py-[2px] rounded-[4px] border border-[rgba(0,0,0,0.15)]" style={{ fontSize: '12px', fontWeight: 400, lineHeight: '20px', color: '#525252', fontFamily: "'Roboto Mono', monospace" }}>
-                            {model.taskType}
-                          </span>
-                        </td>
-                        <td className="px-[24px] py-[16px] max-w-[400px]">
-                          <div className="flex flex-wrap gap-[6px]">
-                            {model.applicabilityTags.slice(0, 4).map((tag, index) => (
-                              <span key={index} className="inline-flex items-center px-[8px] py-[2px] bg-[rgba(0,0,0,0.04)] border border-[rgba(0,0,0,0.08)] rounded-[4px]" style={{ fontSize: '12px', lineHeight: '20px', color: '#6F6F6F', fontFamily: "'Roboto Mono', monospace" }}>
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        </td>
-                        <td className="px-[24px] py-[16px]">
-                          <span className="inline-flex items-center px-[8px] py-[4px] rounded-[4px]" style={{
-                            fontSize: '12px',
-                            lineHeight: '20px',
-                            color: 'rgba(82, 82, 82, 0.65)',
-                            fontWeight: 400,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.3px',
-                            fontFamily: "'Roboto Mono', monospace"
-                          }}>
-                            {model.usageStatus}
-                          </span>
-                        </td>
-                        <td className="px-[24px] py-[16px] text-right">
-                          <Link
-                            to={`/pathologist/marketplace/${model.id}`}
-                            className="inline-flex items-center gap-[4px] text-primary hover:text-[#096dd9] transition-colors font-['Roboto']"
-                            style={{ fontSize: '14px', lineHeight: '22px', fontWeight: 500 }}
-                          >
-                            <span>View Details</span>
-                            <svg className="size-[16px]" fill="none" viewBox="0 0 16 16">
-                              <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
+                    {filteredModels.map((model) => {
+                      // Task type chip colours — same as card view
+                      const taskChip: Record<string, { bg: string; border: string; text: string }> = {
+                        Detection:      { bg: '#f0fdf9', border: '#d2eddb', text: '#0f7661' },
+                        Classification: { bg: '#eff6ff', border: '#bfdbfe', text: '#1d4ed8' },
+                        Segmentation:   { bg: '#fffbeb', border: '#fde68a', text: '#92400e' },
+                        Grading:        { bg: '#f5f3ff', border: '#ddd6fe', text: '#5b21b6' },
+                      };
+                      const chip = taskChip[model.taskType] ?? taskChip.Classification;
+                      const isResearch = model.usageStatus === 'Research-only';
+                      const statusLabel = isResearch ? 'Research' : 'Clinical';
+
+                      return (
+                        <tr
+                          key={model.id}
+                          className="border-b border-[rgba(0,0,0,0.06)] last:border-b-0 transition-colors"
+                          style={{ transition: 'background 0.15s ease' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.015)')}
+                          onMouseLeave={e => (e.currentTarget.style.background = '')}
+                        >
+                          {/* Model Name */}
+                          <td className="px-[24px] py-[16px]">
+                            <Link
+                              to={`/pathologist/marketplace/${model.id}`}
+                              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, lineHeight: '22px', color: '#000000', transition: 'color 0.15s' }}
+                              onMouseEnter={e => ((e.target as HTMLElement).style.color = '#229f90')}
+                              onMouseLeave={e => ((e.target as HTMLElement).style.color = '#000000')}
+                            >
+                              {model.name}
+                            </Link>
+                          </td>
+
+                          {/* Task Type chip — matches card */}
+                          <td className="px-[24px] py-[16px]">
+                            <span
+                              className="inline-flex items-center justify-center px-[9px] py-[3px] rounded-[6px]"
+                              style={{ background: chip.bg, border: `1px solid ${chip.border}`, fontFamily: "'DM Mono', monospace", fontSize: '12px', fontWeight: 500, lineHeight: '20px', color: chip.text, whiteSpace: 'nowrap' }}
+                            >
+                              {model.taskType}
+                            </span>
+                          </td>
+
+                          {/* Applicability tags — matches card */}
+                          <td className="px-[24px] py-[16px]">
+                            <div className="flex flex-wrap gap-[4px]">
+                              {model.applicabilityTags.slice(0, 4).map((tag, i) => (
+                                <span
+                                  key={i}
+                                  className="inline-flex items-center px-[9px] py-[3px] rounded-[6px]"
+                                  style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.13)', fontFamily: "'DM Mono', monospace", fontSize: '12px', fontWeight: 400, lineHeight: '20px', color: '#4b5563', whiteSpace: 'nowrap' }}
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </td>
+
+                          {/* Usage Status chip — matches card */}
+                          <td className="px-[24px] py-[16px]">
+                            <span
+                              className="inline-flex items-center gap-[4px] px-[9px] py-[5px] rounded-[6px]"
+                              style={{ border: '1px solid #ebebeb', fontFamily: "'DM Mono', monospace", fontSize: '12px', fontWeight: 500, lineHeight: '16px', color: 'rgba(82,82,82,0.85)', textTransform: 'capitalize', whiteSpace: 'nowrap' }}
+                            >
+                              <div className="relative shrink-0 size-[16px]">
+                                <img alt="" className="absolute inset-0 size-full object-cover" src={isResearch ? imgResearch : imgHospital} />
+                              </div>
+                              {statusLabel}
+                            </span>
+                          </td>
+
+                          {/* View Details — #229f90 */}
+                          <td className="px-[24px] py-[16px] text-right">
+                            <Link
+                              to={`/pathologist/marketplace/${model.id}`}
+                              className="inline-flex items-center gap-[4px]"
+                              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '14px', fontWeight: 500, lineHeight: '22px', color: '#229f90', transition: 'opacity 0.15s' }}
+                              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity = '0.75')}
+                              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity = '1')}
+                            >
+                              <span>View Details</span>
+                              <svg className="size-[14px]" fill="none" viewBox="0 0 16 16">
+                                <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -747,10 +790,10 @@ export default function PathologistMarketplace() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
-                  <p className="font-['Roboto'] mb-[8px]" style={{ fontSize: '16px', fontWeight: 500, lineHeight: '24px', color: '#161616' }}>
+                  <p className="font-['DM_Sans'] mb-[8px]" style={{ fontSize: '16px', fontWeight: 500, lineHeight: '24px', color: '#161616' }}>
                     No models found
                   </p>
-                  <p className="font-['Roboto']" style={{ fontSize: '14px', lineHeight: '22px', color: '#525252' }}>
+                  <p className="font-['DM_Sans']" style={{ fontSize: '14px', lineHeight: '22px', color: '#525252' }}>
                     Try adjusting your search or filter criteria
                   </p>
                 </div>

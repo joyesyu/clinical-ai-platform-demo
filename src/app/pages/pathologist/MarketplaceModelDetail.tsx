@@ -331,7 +331,7 @@ export default function PathologistMarketplaceModelDetail() {
         <button
           onClick={() => setShowRequestModal(true)}
           className="mb-[56px]"
-          style={{ background: '#096dd9', borderRadius: '4px', padding: '8px 16px', fontFamily: 'Roboto, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '18px', color: 'white', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
+          style={{ background: '#0D9488', borderRadius: '4px', padding: '8px 16px', fontFamily: 'Roboto, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '18px', color: 'white', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
         >
           Apply for use
         </button>

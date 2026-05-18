@@ -1,51 +1,149 @@
 import { useNavigate, useLocation } from 'react-router';
 
-export function PathologistHeader() {
+import imgLogoIcon2 from '../../../assets/logo-icon.png';
+import imgIconHelp1 from '../../../assets/icon_help.png';
+import imgIconNotifications1 from '../../../assets/icon_notifications.png';
+import avatarSarah from '../../../assets/avatar-sarah.jpg';
+
+const imgEllipse3 = avatarSarah;
+
+export interface NavTab {
+  label: string;
+  path: string;
+  isActive: (pathname: string) => boolean;
+}
+
+const PATHOLOGIST_TABS: NavTab[] = [
+  {
+    label: 'Marketplace',
+    path: '/pathologist/marketplace',
+    isActive: (p) => p.includes('/marketplace'),
+  },
+  {
+    label: 'Workspace',
+    path: '/pathologist/workspace',
+    isActive: (p) => p.includes('/workspace'),
+  },
+];
+
+export const DEVELOPER_TABS: NavTab[] = [
+  {
+    label: 'Jobs',
+    path: '/developer/jobs',
+    isActive: (p) => p.includes('/jobs'),
+  },
+  {
+    label: 'My Models',
+    path: '/developer/models',
+    isActive: (p) => p.includes('/models') || p === '/',
+  },
+];
+
+export const DEVELOPER_HOME_ROUTE = '/developer/models';
+
+interface PathologistHeaderProps {
+  tabs?: NavTab[];
+  homeRoute?: string;
+  onNotificationsClick?: () => void;
+}
+
+export function PathologistHeader({
+  tabs = PATHOLOGIST_TABS,
+  homeRoute = '/pathologist/marketplace',
+  onNotificationsClick,
+}: PathologistHeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isMarketplace = location.pathname.includes('/marketplace');
-  const isWorkspace = location.pathname.includes('/workspace');
-
   return (
-    <header className="sticky top-0 z-50 h-[56px] bg-white shadow-[0px_2px_6px_0px_rgba(114,114,114,0.25)]">
-      <div className="h-full px-6 grid items-center" style={{ gridTemplateColumns: '1fr auto 1fr' }}>
-        {/* Logo & Brand */}
-        <div className="flex items-center gap-[10.5px] cursor-pointer" onClick={() => navigate('/pathologist/marketplace')}>
-          <h1 className="font-semibold leading-[32px] text-[24px] text-[#2280c9]">PIXCELL</h1>
-          <p className="font-bold leading-[26px] text-[18px] text-[rgba(58,77,90,0.85)]">Model Management</p>
+    <header className="sticky top-0 z-50 h-[56px] bg-white drop-shadow-[0px_2px_3px_rgba(114,114,114,0.25)]">
+      <div className="h-full flex items-center justify-between px-[24px]">
+
+        {/* Left: logo group + nav tabs */}
+        <div className="flex items-center gap-[48px]">
+
+          {/* Logo group */}
+          <div
+            className="flex items-center gap-[16px] cursor-pointer"
+            onClick={() => navigate(homeRoute)}
+          >
+            <div className="flex items-center">
+              <div className="relative shrink-0 size-[40px]">
+                <img alt="" className="absolute inset-0 size-full object-contain pointer-events-none" src={imgLogoIcon2} />
+              </div>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '16px', lineHeight: '24px', color: '#161616', whiteSpace: 'nowrap' }}>
+                Pixcell
+              </p>
+            </div>
+
+            {/* Vertical divider */}
+            <div style={{ width: '1px', height: '20px', background: 'rgba(0,0,0,0.15)', flexShrink: 0 }} />
+
+            {/* AI Model Management */}
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '14px', lineHeight: '16px', color: 'rgba(103,103,103,0.9)', whiteSpace: 'nowrap' }}>
+              AI Model Management
+            </p>
+          </div>
+
+          {/* Nav tabs */}
+          <div className="flex items-start gap-[16px] justify-center pt-[16px]" style={{ height: '60px' }}>
+            {tabs.map((tab) => {
+              const isActive = tab.isActive(location.pathname);
+              return (
+                <div key={tab.label} className="relative shrink-0 h-[44px]">
+                  <button
+                    onClick={() => navigate(tab.path)}
+                    className="h-[26px] flex items-center justify-center px-[16px]"
+                  >
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '16px', lineHeight: '26px', color: isActive ? '#161616' : '#525252', whiteSpace: 'nowrap' }}>
+                      {tab.label}
+                    </span>
+                  </button>
+                  <div
+                    className="absolute rounded-full"
+                    style={{
+                      background: '#229f90',
+                      height: '3px',
+                      left: '16px',
+                      right: '16px',
+                      top: '41px',
+                      opacity: isActive ? 1 : 0,
+                      transform: isActive ? 'scaleX(1)' : 'scaleX(0)',
+                      transition: 'opacity 0.25s ease, transform 0.25s cubic-bezier(0.22,1,0.36,1)',
+                      transformOrigin: 'center',
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Navigation Tabs — centered */}
-        <div className="flex items-end gap-[16px] h-full pt-[16px]">
-          <button
-            onClick={() => navigate('/pathologist/marketplace')}
-            className="flex flex-col items-center gap-[12px]"
-          >
-            <span className={`font-medium leading-[26px] text-[18px] whitespace-nowrap px-[16px] ${isMarketplace ? 'text-[#161616]' : 'text-[#525252]'}`}>
-              Marketplace
-            </span>
-            <div className={`h-[2px] w-full rounded-full ${isMarketplace ? 'bg-[#1890ff]' : 'bg-transparent'}`} />
-          </button>
-          <button
-            onClick={() => navigate('/pathologist/workspace')}
-            className="flex flex-col items-center gap-[12px]"
-          >
-            <span className={`font-medium leading-[26px] text-[18px] whitespace-nowrap px-[16px] ${isWorkspace ? 'text-[#161616]' : 'text-[#525252]'}`}>
-              Workspace
-            </span>
-            <div className={`h-[2px] w-full rounded-full ${isWorkspace ? 'bg-[#1890ff]' : 'bg-transparent'}`} />
-          </button>
-        </div>
+        {/* Right: icons + user */}
+        <div className="flex items-center gap-[24px]">
 
-        {/* Actions */}
-        <div className="flex items-center gap-[16px] justify-end">
+          {/* Help + Notifications */}
+          <div className="flex items-center gap-[24px]">
+            <img src={imgIconHelp1} alt="Help" style={{ width: '25px', height: '25px', objectFit: 'contain', opacity: 0.85 }} />
+            <img
+              src={imgIconNotifications1}
+              alt="Notifications"
+              onClick={onNotificationsClick}
+              style={{ width: '25px', height: '25px', objectFit: 'contain', opacity: 0.85, cursor: onNotificationsClick ? 'pointer' : 'default' }}
+            />
+          </div>
 
-<div
-            className="size-[32px] rounded-[4px] flex items-center justify-center text-white text-[12px] font-medium cursor-pointer"
-            style={{ background: 'linear-gradient(135deg, #1890ff 0%, #ffffff 100%)' }}
-          >
-            PA
+          {/* User avatar + name */}
+          <div className="flex items-center gap-[8px]">
+            <div
+              className="relative shrink-0 size-[28px] rounded-full overflow-hidden"
+              style={{ boxShadow: '0 0 0 2px white, 0 0 0 4px #229f90' }}
+            >
+              <img alt="" className="absolute inset-0 size-full object-cover block" src={imgEllipse3} />
+            </div>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '12px', lineHeight: '20px', color: 'rgba(22,22,22,0.85)', whiteSpace: 'nowrap' }}>
+              Sarah
+            </span>
           </div>
         </div>
       </div>

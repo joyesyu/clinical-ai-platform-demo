@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router';
 import { ArrowLeft, Upload, Download, CheckCircle2, FileText, Activity, BookOpen, AlertTriangle, ChevronDown, ChevronUp, Edit3 } from 'lucide-react';
-import { Header } from '../components/Header';
+import { PathologistHeader, DEVELOPER_TABS, DEVELOPER_HOME_ROUTE } from '../components/pathologist/PathologistHeader';
 import { models, modelRequests, ModelRequest } from '../data/models';
 import { useState, useEffect, useRef } from 'react';
 import imgRectangle1014 from "figma:asset/026e252d89778572d217f6f3004622792f4e9b3c.png";
@@ -206,9 +206,10 @@ export function ModelDetailsPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#f8f8f8' }}>
-      <Header
+      <PathologistHeader
+        tabs={DEVELOPER_TABS}
+        homeRoute={DEVELOPER_HOME_ROUTE}
         onNotificationsClick={() => setShowRequestsPanel(true)}
-        notificationCount={pendingRequestsCount}
       />
 
       <main style={{ paddingLeft: '72px', paddingRight: '72px', paddingTop: '28px', paddingBottom: '72px' }}>

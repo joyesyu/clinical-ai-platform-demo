@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Filter, AlertCircle, CheckCircle, Clock, XCircle, Plus, ChevronDown } from 'lucide-react';
-import { Header } from '../components/Header';
+import { PathologistHeader, DEVELOPER_TABS, DEVELOPER_HOME_ROUTE } from '../components/pathologist/PathologistHeader';
 import { DeveloperModelCard } from '../components/DeveloperModelCard';
 import { RequestsPanel } from '../components/RequestsPanel';
 import { RequestDetailsOverlay } from '../components/RequestDetailsOverlay';
@@ -88,9 +88,10 @@ export function DashboardPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <Header 
+      <PathologistHeader
+        tabs={DEVELOPER_TABS}
+        homeRoute={DEVELOPER_HOME_ROUTE}
         onNotificationsClick={() => setShowRequestsPanel(true)}
-        notificationCount={pendingRequestsCount}
       />
 
       {/* Main Content */}
@@ -98,18 +99,18 @@ export function DashboardPage() {
         {/* Page Header — left-[72px] top-[96px] (96-56nav=40pt), h-[38px], gap-[8px] */}
         <div className="flex items-center justify-between mb-[40px]">
           <div className="flex items-center gap-[8px]">
-            <h1 className="font-bold text-[24px] leading-[32px] text-black">My Models</h1>
-            <p className="font-normal text-[18px] leading-[26px] text-[#525252]">
+            <h1 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: '24px', lineHeight: '32px', color: '#000000' }}>My Models</h1>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 400, fontSize: '14px', lineHeight: '22px', color: '#525252' }}>
               Manage and monitor your AI models
             </p>
           </div>
           <button
             onClick={handleAddModel}
-            className="flex items-center gap-[8px] bg-[#096dd9] text-white rounded-[4px] px-[16px] py-[8px] hover:bg-[#0958b0] transition-colors"
-            style={{ boxShadow: '0px 4px 6px 0px rgba(0,0,0,0.1)' }}
+            className="flex items-center gap-[8px] text-white rounded-[8px] px-[16px] py-[8px] transition-opacity hover:opacity-90"
+            style={{ background: '#0c857a', fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: '14px', lineHeight: '21px' }}
           >
-            <Plus className="size-[17.5px]" strokeWidth={2.5} />
-            <span className="text-[14px] font-medium leading-[21px] whitespace-nowrap">Upload New Model</span>
+            <Plus className="size-[17.5px]" strokeWidth={2} />
+            <span className="whitespace-nowrap">Upload New Model</span>
           </button>
         </div>
 
@@ -118,8 +119,8 @@ export function DashboardPage() {
           <div className="flex flex-col gap-[16px] mb-[48px]">
             <div className="flex items-center justify-between h-[52px]">
               <div className="flex flex-col gap-[4px]">
-                <h2 className="font-semibold text-[18px] leading-[26px] text-[rgba(22,22,22,0.85)]">Needs Action</h2>
-                <p className="font-normal text-[14px] leading-[22px] text-[#6f6f6f]">Models in review that require revision</p>
+                <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '18px', lineHeight: '26px', color: 'rgba(22,22,22,0.85)' }}>Needs Action</h2>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 400, fontSize: '14px', lineHeight: '22px', color: '#6f6f6f' }}>Models in review that require revision</p>
               </div>
             </div>
             <div className="grid grid-cols-4 gap-x-[16px] gap-y-[16px]">
@@ -138,11 +139,11 @@ export function DashboardPage() {
         <div className="flex flex-col gap-[16px]">
           <div className="flex items-center justify-between h-[52px]">
             <div className="flex flex-col gap-[4px]">
-              <h2 className="font-semibold text-[18px] leading-[26px] text-[rgba(22,22,22,0.85)]">All Models</h2>
-              <p className="font-normal text-[14px] leading-[22px] text-[#6f6f6f]">Complete overview of all your models</p>
+              <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: '18px', lineHeight: '26px', color: 'rgba(22,22,22,0.85)' }}>All Models</h2>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 400, fontSize: '14px', lineHeight: '22px', color: '#6f6f6f' }}>Complete overview of all your models</p>
             </div>
             <div className="flex items-center gap-[8px]">
-              <p className="font-normal text-[14px] leading-[22px] text-[#6f6f6f]">Sort By</p>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 400, fontSize: '12px', lineHeight: '20px', color: '#6f6f6f' }}>Sort By</p>
               <div style={{ position: 'relative', display: 'inline-block' }}>
                 <select
                   value={sortBy}
@@ -150,13 +151,14 @@ export function DashboardPage() {
                   style={{
                     appearance: 'none',
                     WebkitAppearance: 'none',
+                    fontFamily: "'DM Sans', sans-serif",
                     background: 'white',
                     border: '1px solid #d9d9d9',
-                    borderRadius: '4px',
+                    borderRadius: '6px',
                     paddingLeft: '12px',
                     paddingRight: '28px',
-                    height: '32px',
-                    fontSize: '14px',
+                    height: '36px',
+                    fontSize: '12px',
                     color: 'rgba(22,22,22,0.85)',
                     outline: 'none',
                     cursor: 'pointer',

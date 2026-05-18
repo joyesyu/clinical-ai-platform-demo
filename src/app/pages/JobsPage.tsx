@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router';
-import { Header } from '../components/Header';
+import { PathologistHeader, DEVELOPER_TABS, DEVELOPER_HOME_ROUTE } from '../components/pathologist/PathologistHeader';
 import { Search, ChevronUp, ChevronDown, ArrowUpRight } from 'lucide-react';
 import { jobs, Job } from '../data/jobs';
 import { modelRequests } from '../data/models';
@@ -104,7 +104,7 @@ export function JobsPage() {
 
   return (
     <div className="min-h-screen" style={{ background: '#ffffff' }}>
-      <Header notificationCount={pendingRequestsCount} onNotificationsClick={() => navigate('/developer/models')} />
+      <PathologistHeader tabs={DEVELOPER_TABS} homeRoute={DEVELOPER_HOME_ROUTE} onNotificationsClick={() => navigate('/developer/models')} />
 
       <main style={{ paddingLeft: '72px', paddingRight: '72px' }}>
         {/* Page Title */}
